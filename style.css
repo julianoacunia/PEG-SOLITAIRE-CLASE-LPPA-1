@@ -1,63 +1,137 @@
 body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color:yellow;
-    }
-   
+display: flex;
+background:url(../PEG-SOLITAIRE-CLASE-LPPA/image/fondo1.jpg);
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+.title{
+font-size: 30px;
+color: #ffffff;
+font-family: Arial, Helvetica, sans-serif;
+}
+.boton_personalizado{
+position: fixed;
+left: 30px;
+top: 0%;
+margin-top: 50px;  
+text-decoration: none;
+padding: 10px;
+font-weight: 600;
+font-size: 20px;
+color: #000000;
+background-color: #1883ba;
+border-radius: 6px;
+border: 2px solid #0016b0;
+}
+.boton_personalizado:hover{
+color: #1883ba;
+background-color: #ffffff;
+}
+.boton_personalizado_1{
+position: fixed;
+left: 30px;
+top: 10%;
+margin-top: 50px;  
+text-decoration: none;
+padding: 10px;
+font-weight: 600;
+font-size: 20px;
+color: #000000;
+background-color: #1883ba;
+border-radius: 6px;
+border: 2px solid #0016b0;
+}
+.boton_personalizado_1:hover{
+color: #1883ba;
+background-color: #ffffff;
+}
+#footer{
+display: flex;
+justify-content: center;
+padding-top: 20px;
+}
+#board{ 
+border-radius: 5px;
+padding: 1vw;
+margin-top: 3vh;
+}
+#board button{
+width: 3vw;
+height: 3vw;
+margin: 1vw;
+border: 1px solid #999;
+border-radius: 50px;
+}
     
-    #board{
-        background-color: #8b8a8a;
-        border-radius: 5px;
-        padding: 1vw;
-        margin-top: 3vh;
-      }
-      #board button{
-        width: 3vw;
-        height: 3vw;
-        margin: 1vw;
-        border: 1px solid #999;
-        border-radius: 50px;
-      }
+#board button.hidden{
+visibility: hidden;
+}  
+#board button.peg{
+background-color: #fabdfc;
+border: 2px solid #000408;
+border-radius: 50px;
+box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
+}
+#board button.peg:hover{
+background-color: #bf6ae6;
+}
+#board button.peg:active{
+background-color: #bf6ae6;    
+}
+#board button.hole{
+background-color: #333333;
+}
+#board button.hole:hover{
+cursor: default;
+}
+#board button.selected{
+background-color: #500070;
+border: 2px solid #ffffff;
+border-radius: 50px;
+box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
+}
+#board button.selected:active{
+background-color: #500070;
+}
     
-      #board button.hidden{
-        visibility: hidden;
-      }
+#board button.suggestion{
+background-color: rgb(255, 2, 2);
+border: 2px solid #9b0027;
+box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
+}
+p{
+font-size: 35px;
+color: #fff;
+line-height: 50px;
+position: relative;
+width: 650px;
+margin: auto;
+margin-top:30px;
+padding: 20px;
+box-shadow: 0 0 20px 1px rgba(0,0,0,0.3);
+}
+p#Score {
+justify-content: center;
+padding: 0px;
+margin: auto;
+font-size: 40px;
+text-align: center;
+color: #ffffff;
+width: 228px;
+border: 2px solid #030107;
+box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65);
+}
+
     
-      #board button.peg{
-    background-color: #0000aa;
-    border: 2px solid #013d78;
-    border-radius: 50px;
-    box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
-        }
-        #board button.peg:hover{
-    background-color: #00006e;
-    }
-    
-    #board button.peg:active{
-    background-color: #000066;
-    
-        }
-        #board button.hole{
-      background-color: #333333;
-        }
-        #board button.hole:hover{
-    cursor: default;
-        }
-        #board button.selected{
-      background-color: #3b753b;
-      border: 2px solid #295220;
-      border-radius: 50px;
-       box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
-    }
-    #board button.selected:active{
-      background-color: #368536;
-    }
-    
-    #board button.suggestion{
-      background-color: rgb(255, 167, 2);
-      border: 2px solid #9b6a00;
-       box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
-    }
+
+
+
+    /* 
+
+
+
+    */
+
+  
     
