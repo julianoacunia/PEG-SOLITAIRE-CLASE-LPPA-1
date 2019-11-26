@@ -509,6 +509,7 @@ var pressButton = function (evt) {
   //RANKING BTN
   else if (id == 'ranking') {
     var newpopup = document.getElementById('popup-ranking')
+    console.log(newpopup)
     var innerPopup = document.getElementById('popup-ranking-inner')
     if (newpopup.className === 'popup-hide') {
       newpopup.className = 'popup-show'
