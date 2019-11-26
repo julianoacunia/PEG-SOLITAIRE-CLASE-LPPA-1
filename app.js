@@ -19,6 +19,7 @@ var getPositionFromId = function (id) {
   return {}
 }
 var score = 0;
+var piece = 32;
 var selectedPeg = {x:undefined,y:undefined};
 var suggestions = []
 var createId = function(rowN,colN){
@@ -157,12 +158,43 @@ var movePeg = function(evt){
     }
   }
 }
-
 var AddHoleEventHandlers = function(hole){
   for (var i = 0; i < hole.length; i++) {
     hole[i].onclick = movePeg;
     
   }
+}
+var Resetgame = function(){
+  var board = [
+    [,, {value:1},{value:1},{value:1},,],
+    [,, {value:1},{value:1},{value:1},,],
+    [{value:1},{value:1}, {value:1},{value:1},{value:1},{value:1},{value:1}],
+    [{value:1},{value:1}, {value:1},{value:0},{value:1},{value:1},{value:1}],
+    [{value:1},{value:1}, {value:1},{value:1},{value:1},{value:1},{value:1}],
+    [,, {value:1},{value:1},{value:1},,],
+    [,, {value:1},{value:1},{value:1},,]
+  ]
+  var boardReseted = document.getElementById('board');
+  boardReseted.innerHTML = generateBoard(board);
+  var pegsss = boardReseted.getElementsByTagName('button');
+  addPegsEventHandlers(pegsss);
+  score = 0;
+  var putScore = document.getElementById('Score');
+  putScore.textContent = 'SCORE' +'  '+ score;
+  pieces = 32;
+  var counter = document.getElementById('Pegs');
+  counter.textContent = 'PEGS' +'  '+ numberOfPegs; 
+  winner.textContent = 'PEG SOLITAIRE';
+}
+var Savegame = function () {
+localStorage.setItem("SaveBoard", JSON.stringify(board));
+localStorage.setItem("SavePieces", JSON.stringify(piece));
+localStorage.setItem("SaveScore", JSON.stringify(score));
+}
+var Loadgame = function() {
+  board = JSON.parse(localStorage.getItem("SaveBoard"));
+  piece = JSON.parse(localStorage.getItem("SavePieces"));
+  score = JSON.parse(localStorage.getItem("SaveScore"));
 }
 
 var init = function() {
@@ -174,6 +206,12 @@ var init = function() {
   var hole = boardElement.getElementsByClassName("hole");
   AddHoleEventHandlers(hole)
   document.getElementById("Score").textContent = "Score:" +" "+" "+" "+" "+ score;
+  var savinggame = document.getElementById("SaveGame");
+  savinggame.onclick = Savegame;
+  var loadinggame = document.getElementById("Load");
+  loadinggame.onclick = Loadgame;
+  var resetinggame = document.getElementById("Reset");
+  resetinggame.onclick = Resetgame;
 }
 /*
 var ReiniciarJuego = function() {

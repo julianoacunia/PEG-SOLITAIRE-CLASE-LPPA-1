@@ -1,55 +1,15 @@
-body{
-display: flex;
-background:url(../PEG-SOLITAIRE-CLASE-LPPA/image/fondo1.jpg);
-flex-direction: column;
-justify-content: center;
-align-items: center;
-}
 .title{
-font-size: 30px;
+font-size: 20px;
 color: #ffffff;
 font-family: Arial, Helvetica, sans-serif;
 }
-.boton_personalizado{
-position: fixed;
-left: 30px;
-top: 0%;
-margin-top: 50px;  
-text-decoration: none;
-padding: 10px;
-font-weight: 600;
-font-size: 20px;
-color: #000000;
-background-color: #1883ba;
-border-radius: 6px;
-border: 2px solid #0016b0;
-}
-.boton_personalizado:hover{
-color: #1883ba;
-background-color: #ffffff;
-}
-.boton_personalizado_1{
-position: fixed;
-left: 30px;
-top: 10%;
-margin-top: 50px;  
-text-decoration: none;
-padding: 10px;
-font-weight: 600;
-font-size: 20px;
-color: #000000;
-background-color: #1883ba;
-border-radius: 6px;
-border: 2px solid #0016b0;
-}
-.boton_personalizado_1:hover{
-color: #1883ba;
-background-color: #ffffff;
-}
-#footer{
+footer{
 display: flex;
+align-items: center;
 justify-content: center;
-padding-top: 20px;
+flex-direction: row;
+background-color: red;
+top: 50px;
 }
 #board{ 
 border-radius: 5px;
@@ -86,8 +46,8 @@ background-color: #333333;
 cursor: default;
 }
 #board button.selected{
-background-color: #500070;
-border: 2px solid #ffffff;
+background-color: #bf6ae6;
+border: 2px solid #000000;
 border-radius: 50px;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
 }
@@ -96,8 +56,8 @@ background-color: #500070;
 }
     
 #board button.suggestion{
-background-color: rgb(255, 2, 2);
-border: 2px solid #9b0027;
+background-color:  #7907a7;
+border: 2px solid #000000;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
 }
 p{
@@ -122,16 +82,16 @@ width: 228px;
 border: 2px solid #030107;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65);
 }
-
-    
-
-
-
-    /* 
-
-
-
-    */
-
+p#Pegs{
+justify-content: center;
+padding: 0px;
+margin: auto;
+font-size: 40px;
+text-align: center;
+color: #ffffff;
+width: 228px;
+border: 2px solid #030107;
+box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65);
+} 
   
     

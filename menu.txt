@@ -1,0 +1,15 @@
+ <div class="HOLA">
+      <h2>MENU</h2>
+      <ul>
+          <!--MENU-->
+          <h2 id="TitlePlayer">Players</h2>
+          <!--PLAYERS-->
+          <input type="text" name="Name" placeholder="Name" id="nameTxt">
+          <button id="btnSaveGame">Save</button>
+          <li><a id="Reset" href="" onclick="return ReiniciarJuego();"> Reset</a></li>
+          <li><a id="Load">Load</a></li>
+          <li><a id="SaveGame">Save game</a></li>         
+          <footer>
+          </footer>
+      </ul>
+  </div>
