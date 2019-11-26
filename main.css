@@ -21,11 +21,8 @@ header  {
   margin: 15px;
   margin-top: 10px;
   padding: 10px;
-  border: none;
-  background-image: url();
-  text-shadow: 0 -1px 0 #ef816c;
-  animation: spring 300ms ease-out;
-  cursor: pointer;
+  border: 2px  #fabdfc;
+  border-radius: 20px;
 }
 .menu button:hover {
   background-color: #bf6ae6;
