@@ -13,18 +13,31 @@
 </head>
 <body>   
   <header>
-    <div id="menu">
-      <button type="text" onclick="resetBoard()">REINICIAR</button>
-      <button type="text" onclick="LoadPegs()">CARGAR</button>
-      <button type="text" onclick="savePegs()">GUARDAR</button>
+    <div class="menu">
+      <button id="reset">REINICIAR</button>
+      <button id="load">CARGAR</button>
+      <button id="save">GUARDAR</button>
+      <button id="ranking">RANKING</button>
     </div>
   </header>
   <main>
   <div id="container"> 
     <div id="board"></div>
     <p id="Score">SCORE: </p>
-    <p id="Pegs"> PEGS: </p>
   </div>
+  <div id="overlay" class="overlay-disabled">
+    <div id="popup-result" class="popup-hide">
+        <p id="popup-text" class="popup-result-text"></p>
+        <div id="popup-final-score" class="popup-result-text"></div>
+        <button id="popup-reset-btn" class="popup-btn">Play Again</button>
+        <button id="popup-save-btn" class="popup-btn">Save Score</button>
+        <div id="inner-form" class="form-disabled"></div>
+    </div>
+    <div id="popup-ranking" class="popup-hide">
+        <div id="popup-ranking-inner"></div>
+        <button id="popup-ranking-btn" class="popup-btn">Return</button>
+    </div>
+</div>
 </main>
 <footer>
   <h1 class="title">PEG SOLITAIRE HECHO POR JULIANO ACUÑA</h1>

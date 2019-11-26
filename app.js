@@ -1,459 +1,552 @@
-//Score
-var score;
-var numberOfPegs;
+//#region Board Representation
 
-//Object of Peg
-var selectedPeg = { x: undefined, y: undefined };
-
-//Creation of pegs 
-var createId = function (rowN, colN) 
-{
-  return 'peg-' + rowN + '-' + colN;
-}
-
-//Dynamic id
-var getPositionFromId = function (id) {
-  var idParts = id && id.length ? id.split('-') : [];
-  if (idParts.length === 3) {
-    return {x: parseInt(idParts[1]),y: parseInt(idParts[2])};
-  }
-  return {};
-}
-
-// Generate functional board
-var generateCell = function (cell, rowN, colN) {
-  var html = '<button id="' + createId(rowN, colN) + '" class="';
-  if (cell && cell.value) {
-    html += 'peg';
-  }
-  else if (cell && cell.value === 0) {
-    html += 'hole';
-  }
-  else {
-    html += 'hidden';
-  }
-  html += '"></button>';
-  return html;
-}
-
-var generateRow = function (row, rowN) {
-  var html = '<ul>';
-  for (var j = 0; j < row.length; j++) {
-    html += generateCell(row[j], rowN, j);
-  }
-  html += '</ul>';
-  return html;
-}
-
-var generateBoard = function (board) {
-  var html = '';
-  for (var i = 0; i < board.length; i++) {
-    html += generateRow(board[i], i);
-  }
-  return html;
-}
-
-//Non-selected peg function
-var unselectPeg = function () {
-  if (selectedPeg.x !== undefined && selectedPeg.y !== undefined) {
-    var prevSelectedId = createId(selectedPeg.x, selectedPeg.y);
-    document.getElementById(prevSelectedId).className = 'peg';
-  }
-}
-
-// Function to return a specify element
-var getElement = function (id) {
-  var element = document.getElementById(id);
-  return element || {};
-}
-
-// Function to solve the problem that the suggestions not dissappear when there are more than one
-var hideRecommendation = function () {
-  var suggestions = document.getElementsByClassName('suggestion');
-  while (suggestions.length > 0) {
-    for (var i = 0; i < suggestions.length; i++) {
-      suggestions[i].className = 'hole';
-    }
-  }
-}
-
-// Function to list move recommendations for a ball
-var searchRecommendations = function(myBall){
-  var suggestions = [];
-  var near = {
-    above:  getElement(createId(myBall.x-1,myBall.y)),
-    right:  getElement(createId(myBall.x,myBall.y+1)),
-    below:  getElement(createId(myBall.x+1,myBall.y)),
-    left:   getElement(createId(myBall.x,myBall.y-1))
-  };
-  var possible = {
-      above:  getElement(createId(myBall.x-2,myBall.y)),
-      right:  getElement(createId(myBall.x,myBall.y+2)),
-      below:  getElement(createId(myBall.x+2,myBall.y)),
-      left:   getElement(createId(myBall.x,myBall.y-2))
-  };
-  if (near.above.className === 'peg' && possible.above.className === 'hole') {
-    suggestions.push(possible.above);
-  }
-  if (near.right.className === 'peg' && possible.right.className === 'hole') {
-    suggestions.push(possible.right);
-  }
-  if (near.below.className === 'peg' && possible.below.className === 'hole') {
-    suggestions.push(possible.below);
-  }
-  if (near.left.className === 'peg' && possible.left.className === 'hole') {
-    suggestions.push(possible.left);
-  }
-  return suggestions;
-}
-
-//Function to count if there are any possible move
-var countRecommendations = function () {
-  var ballPlaces = document.getElementsByClassName('peg');
-  var winner = document.getElementById('winner');
-  for (var i = 0; i < ballPlaces.length; i++) {
-    var thisBall = getPositionFromId(ballPlaces[i].id);
-    var suggestions = searchRecommendations(thisBall);
-    if (suggestions.length > 0) {
-      return {};
-    }
-  }
-  if(winner.textContent !== 'YOU WON THE GAME'){
-    winner.textContent = 'GAME OVER: NO MORE POSSIBLE MOVES.';
-    showRankingDiv(true,'YOUR SCORE'+' '+ score);
-  }
-}
-
-// Move pegs functions and score with peg-counter
-//Choosing the Peg , if it is a peg , is a selected peg or it is a suggestion
-var choosePeg = function (evt) {
-  var ball = evt.target;
-  var ballClass = ball.className;
-  unselectPeg();
-  hideRecommendation();
-  if (ballClass === 'peg') {
-    selectPeg(ball);
-  }
-  else if (ballClass === 'selected') {
-    selectedPeg.x = undefined;
-    selectedPeg.y = undefined;
-  }
-  else if (ballClass === 'suggestion') {
-    moveBall(ball);
-   countRecommendations();
-  }
-}
-
-//Execute the movement
-var moveBall = function (ball) {
-  ball.className = 'peg';
-  var prevSelectedId = createId(selectedPeg.x, selectedPeg.y);
-  var refreshScore = document.getElementById('score');
-  var winner = document.getElementById('winner');
-  var counter = document.getElementById('pegs-remaining');
-  document.getElementById(prevSelectedId).className = 'hole';
-  var id = getPositionFromId(ball.id);
-  if (id.x > selectedPeg.x) {
-    var middleBall = createId(selectedPeg.x + 1, selectedPeg.y);
-  }
-  else if (id.x < selectedPeg.x) {
-    var middleBall = createId(selectedPeg.x - 1, selectedPeg.y);
-  }
-  else if (id.y > selectedPeg.y) {
-    var middleBall = createId(selectedPeg.x, selectedPeg.y + 1);
-  }
-  else if (id.y < selectedPeg.y) {
-    var middleBall = createId(selectedPeg.x, selectedPeg.y - 1);
-  }
-  document.getElementById(middleBall).className = 'hole';
-  selectedPeg.x = undefined;
-  selectedPeg.y = undefined;
-  score += 100;
-  refreshScore.textContent = 'SCORE' +'  '+ score;
-  numberOfPegs = numberOfPegs - 1;
-  counter.textContent = 'PEGS' +'  '+ numberOfPegs; 
-  if (numberOfPegs === 1) {
-    if (id.x == 3 && id.y == 3){
-      winner.textContent = 'YOU WON THE GAME';
-      showRankingDiv(true,'YOUR SCORE'+' '+ score);
-    }
-    else{
-      winner.textContent = 'GAME OVER:THE LAST BALL IS NOT IN THE CENTER '
-      showRankingDiv(true,'YOUR SCORE'+' '+ score);
-    }
-  }
-}
-
-// Posibbles movements and Count possibles movements
-var showRecommendations = function () {
-  var near = {
-    above: getElement(createId(selectedPeg.x - 1, selectedPeg.y)),
-    left: getElement(createId(selectedPeg.x, selectedPeg.y - 1)),
-    right: getElement(createId(selectedPeg.x, selectedPeg.y + 1)),
-    below: getElement(createId(selectedPeg.x + 1, selectedPeg.y)),
-  }
-  var possible = {
-    above: getElement(createId(selectedPeg.x - 2, selectedPeg.y)),
-    left: getElement(createId(selectedPeg.x, selectedPeg.y - 2)),
-    right: getElement(createId(selectedPeg.x, selectedPeg.y + 2)),
-    below: getElement(createId(selectedPeg.x + 2, selectedPeg.y)),
-  }
-  if (near.above.className === 'peg' && possible.above.className === 'hole') {
-    possible.above.className = 'suggestion';
-  }
-  if (near.left.className === 'peg' && possible.left.className === 'hole') {
-    possible.left.className = 'suggestion';
-  }
-  if (near.right.className === 'peg' && possible.right.className === 'hole') {
-    possible.right.className = 'suggestion';
-  }
-  if (near.below.className === 'peg' && possible.below.className === 'hole') {
-    possible.below.className = 'suggestion';
-  }
-}
-var thisBall = { x: undefined, y: undefined }
-var selectPeg = function (peg) {
-var idparts = getPositionFromId(peg.id);
-selectedPeg.x = idparts.x;
-selectedPeg.y = idparts.y;
-peg.className = 'selected';
-showRecommendations(); 
-}
-
-//Pegs handler
-var addPegsEventHandlers = function (pegs) {
-  for (var i = 0; i < pegs.length; i++) {
-   pegs[i].onclick = choosePeg;
-  }
-}
-
-//MENU
-
-//Reset
-var resetBoard = function () {
- //Initializing array that represents a board
+//Board
 var board = [
-  [, , { value: 1 }, { value: 1 }, { value: 1 }, ,,],
-  [, , { value: 1 }, { value: 1 }, { value: 1 }, ,,],
+  [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
+  [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
   [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }],
   [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 0 }, { value: 1 }, { value: 1 }, { value: 1 }],
   [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }],
-  [, , { value: 1 }, { value: 1 }, { value: 1 }, ,,],
-  [, , { value: 1 }, { value: 1 }, { value: 1 }, ,,]
+  [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
+  [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined]
 ]
-  var boardReseted = document.getElementById('board');
-  boardReseted.innerHTML = generateBoard(board);
-  var winner = document.getElementById('winner');
-  var pegsss = boardReseted.getElementsByTagName('button');
-  addPegsEventHandlers(pegsss);
-  score = 0;
-  var putScore = document.getElementById('score');
-  putScore.textContent = 'SCORE' +'  '+ score;
-  numberOfPegs = 32;
-  var counter = document.getElementById('pegs-remaining');
-  counter.textContent = 'PEGS' +'  '+ numberOfPegs; 
-  winner.textContent = 'PEG SOLITAIRE';
+
+//Return board to inital state
+var resetBoard = function () {
+  board = [
+    [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
+    [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
+    [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }],
+    [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 0 }, { value: 1 }, { value: 1 }, { value: 1 }],
+    [{ value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }, { value: 1 }],
+    [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined],
+    [undefined, undefined, { value: 1 }, { value: 1 }, { value: 1 }, undefined, undefined]
+  ]
 }
 
-//Save the game
-var boardValues = function () {
-  var currentBoard = [];
-  var myBoard = document.getElementById('board');
-  var myUls = myBoard.getElementsByTagName('ul');
-   for (var i = 0; i < myUls.length; i++) {
-    var myUl = [];
-    var myButtons = myUls[i].getElementsByTagName('button');
-    for (var j = 0; j < myButtons.length; j++) {
-      if (myButtons[j].className === 'peg' || myButtons[j].className === 'selected') 
-      { myUl.push({ value: 1 }); }
-      else if (myButtons[j].className === 'hole' || myButtons[j].className === 'suggestion') { myUl.push({ value: 0 }); }
-      else { myUl.push(undefined); }
-    } currentBoard.push(myUl);
+//Load board initial state
+var loadBoard = function() {
+  board = JSON.parse(localStorage['board'])
+}
+
+//#endregion
+
+//#region Generate Board
+
+//Returns string with row number and column number (used to make id)
+var createId = function (rowN, colN) {
+  return 'ball-' + rowN + '-' + colN
+}
+
+//Create buttons inside a row with id and a class
+var generateCell = function (cell, rowN, colN) {
+  var html = '<button id="' + createId(rowN, colN) + '" class="'
+  if (cell && cell.value) {
+    html += 'ball'
   }
-  return currentBoard;
+  else if (cell && cell.value == 0) {
+    html += 'empty'
+  }
+  else {
+    html += 'hidden'
+  }
+  html += '"></button>'
+  return html
 }
 
-var savePegs = function (){
-  //Saving an object of name "game" with the attributes : board,score and number of pegs 
-  var game = {board:boardValues(),Score:score,Pegs:numberOfPegs};
-  localStorage.setItem('savefile', JSON.stringify(game));
-} 
-
-// Load Game
-var LoadPegs = function () {
-  var savedGame = JSON.parse(localStorage.getItem('savefile'));
-  var loadedBoard = document.getElementById('board');
-  loadedBoard.innerHTML = generateBoard(savedGame.board);
-  var loadedScore = document.getElementById('score');
-  loadedScore.textContent = 'SCORE' +'  '+ savedGame.Score;
-  var loadedPegs = document.getElementById('pegs-remaining');
-  loadedPegs.textContent = 'PEGS' +' '+ savedGame.Pegs; 
-  var balls = loadedBoard.getElementsByTagName('button');
-  score = parseInt(savedGame.Score);
-  numberOfPegs = savedGame.Pegs;
-  addPegsEventHandlers(balls);
- }
-
-// HighScores
-var viewRanking = function(){
-  var rankingDiv = getElement('ranking');
-  rankingDiv.className = 'diplay-block';
-  var header = getElement('ranking-header');
-  header.innerText = 'RANKING';
-  var userData = getElement('user-data');
-  userData.className = 'display-none';
-  var userRank = getElement('user-rank');  
-  userRank.className = 'display-block';
-  var close = getElement('close-ranking-button');
-  close.onclick = closeRankingDiv;
-  userRank.innerHTML = usersPoints();
-} 
-
-// Show Higscores and names
-var closeRankingDiv = function(){
-   var rankingDiv = getElement('ranking');
-   rankingDiv.className = 'display-none';
-   var ListPlayers = getElement('user-rank');
-   ListPlayers.className = 'display-none';
+//Creates div "row" (inside of div game) and generates cells dependig on his lenght (board[i] lenght)
+var generateRow = function (row, rowN) {
+  var html = '<div class="row">'
+  for (let j = 0; j < row.length; j++) {
+    html += generateCell(row[j], rowN, j)
+  }
+  html += '</div>'
+  return html
+}
+  
+//Creates div "game" and executes "generateRow" depending on board lenght (0-6)
+var generateBoard = function () {
+  var html = '<div class="game">'
+  for (i = 0; i < board.length; i++) {
+    html += generateRow(board[i], i)
+  }
+  html += '</div>'
+  return html
 }
 
-//Function to get date
-function getDate() {
-  var date = new Date();
-  var yyyy = date.getFullYear();
-  var dd = date.getDate();
-  var mm = (date.getMonth() + 1);
-  //Puts the 0 for the numbers below 2 digits
+//#endregion
+
+//#region Ball selection and suggestions
+
+var selectedBall = { x: undefined, y: undefined }
+
+//Gives all balls the funciton selectBall (on click)
+var addBallsEventHandlers = function (Balls) {
+  for (let i = 0; i < Balls.length; i++) {
+    Balls[i].onclick = selectBall
+  }
+}
+
+//Return x and y positions
+var getPositionFromId = function(id) {
+  var idParts = id && id.length ? id.split('-') : [] 
+  if (idParts.length === 3) {
+    return {
+      x: parseInt(idParts[1]),
+      y: parseInt(idParts[2])
+    }
+  }
+  return {}
+}
+
+//Change class "ballSelected" to class "ball" from a selectedBall
+var unselectBall = function () {
+  if (selectedBall.x !== undefined && selectedBall.y !== undefined) {
+    var prevSelectedId = createId(selectedBall.x, selectedBall.y)
+    document.getElementById(prevSelectedId).className = 'ball'
+    //change class suggestion to empty
+    var suggestions = document.getElementsByClassName('suggestions')
+    for (let i = 0; i < suggestions.length; i++) {
+      suggestions[i].className = 'empty'
+    }
+  }
+}
+
+//Returns inner html from element (need id)
+var getElement = function (id) {
+  var element = document.getElementById(id)
+  return element || {}
+}
+
+//Array will contain all possible movements
+var suggestions = []
+
+//executed on selectBall
+var showSuggestions = function () {
+  var near = {
+    //vars will contain inner html from buttons near
+    above: getElement(createId(selectedBall.x - 1, selectedBall.y)),
+    left: getElement(createId(selectedBall.x, selectedBall.y - 1)),
+    right: getElement(createId(selectedBall.x, selectedBall.y + 1)),
+    below: getElement(createId(selectedBall.x + 1, selectedBall.y))
+  }
+  var possible = {
+    //vars will contain inner html from buttos next to near
+    above: getElement(createId(selectedBall.x - 2, selectedBall.y)),
+    left: getElement(createId(selectedBall.x, selectedBall.y - 2)),
+    right: getElement(createId(selectedBall.x, selectedBall.y + 2)),
+    below: getElement(createId(selectedBall.x + 2, selectedBall.y))
+  }
+  //change class empty from var possible to suggestions and fill in the array suggestion
+  if (near.above.className === 'ball' && possible.above.className === 'empty') {
+    possible.above.className = 'suggestions'
+    suggestions.push(possible.above.id) /* save suggestions id into array*/
+  }
+  if (near.left.className === 'ball' && possible.left.className === 'empty') {
+    possible.left.className = 'suggestions'
+    suggestions.push(possible.left.id)
+  }
+  if (near.right.className === 'ball' && possible.right.className === 'empty') {
+    possible.right.className = 'suggestions'
+    suggestions.push(possible.right.id)
+  }
+  if (near.below.className === 'ball' && possible.below.className === 'empty') {
+    possible.below.className = 'suggestions'
+    suggestions.push(possible.below.id)
+  }
+}
+
+var selectBall = function (evt) {
+  suggestions = []
+  //Get the ball clicked
+  var Ball = evt.target
+  //Obtain x and y positions from the ID
+  var pos = getPositionFromId(Ball.id)
+  if (pos.x !== undefined && pos.y !== undefined) {
+    //In case of having a ball selected
+    unselectBall()
+    //In case of clicking the same ball twice
+    if (selectedBall.x === parseInt(pos.x) && selectedBall.y === parseInt(pos.y)) {
+      unselectBall()
+      selectedBall.x = undefined
+      selectedBall.y = undefined
+    }
+    //Changes values from array selectedBall and ball class
+    else {
+      selectedBall.x = parseInt(pos.x)
+      selectedBall.y = parseInt(pos.y)
+      Ball.className = 'ballSelected'
+      showSuggestions()
+    }
+  }
+}
+
+//#endregion
+
+//#region Check victory or defeat
+
+//Save all near balls
+var getNearBall = function(x, y) {
+  var near = {
+    above: getElement(createId(x - 1, y)),
+    left: getElement(createId(x, y - 1)),
+    right: getElement(createId(x, y + 1)),
+    below: getElement(createId(x + 1, y))
+  }
+  return near 
+}
+
+//Save balls next to near balls
+var getPossibleBall = function(x, y) {
+  var possible = {
+    above: getElement(createId(x - 2, y)),
+    left: getElement(createId(x, y - 2)),
+    right: getElement(createId(x, y + 2)),
+    below: getElement(createId(x + 2, y))
+  }
+  return possible 
+}
+
+var allSuggestions = []
+
+//Check if there is a possible suggestion
+var checkResult = function () {
+  var balls = document.getElementsByClassName('ball')
+  allSuggestions = []
+  for (i = 0; i < balls.length; i++) {
+    var pos = getPositionFromId(balls[i].id)
+    if (pos.x !== undefined && pos.y !== undefined) {
+      var near = getNearBall(pos.x, pos.y)
+      var possible = getPossibleBall(pos.x, pos.y)
+      if (near.above.className === 'ball' && possible.above.className === 'empty') {
+        allSuggestions.push(possible.above.id)
+      }
+      if (near.left.className === 'ball' && possible.left.className === 'empty') {
+        allSuggestions.push(possible.left.id)
+      }
+      if (near.right.className === 'ball' && possible.right.className === 'empty') {
+        allSuggestions.push(possible.right.id)
+      }
+      if (near.below.className === 'ball' && possible.below.className === 'empty') {
+        allSuggestions.push(possible.below.id)
+      }
+    }
+  }
+  if (allSuggestions.length === 0) {
+    return true
+  }
+  else {
+    return false
+  }
+}
+
+//#endregion
+
+//#region Popup result, form and ranking
+
+//Show or hide overlay
+var overlayAction = function() {
+  overlay = document.getElementById('overlay')
+  if (overlay.className === 'overlay-disabled') {
+    overlay.className = 'overlay-enabled'
+  }
+  else {
+    overlay.className = 'overlay-disabled'
+  }
+}
+
+//Get text
+var changeResult = function (result) {
+  var text = document.getElementById('popup-text')
+  text.innerHTML = result
+}
+
+//Get score
+var popupScore = function(currentPoints) { 
+  finalScore = document.getElementById('popup-final-score') 
+  finalScore.innerHTML = '<p class="popup-result-text"> Your final score is: ' + currentPoints + ' !Great Job!</p>'
+}
+
+//Show or hide popup result
+var popupAction = function(result, currentPoints) {
+  var popup = document.getElementById('popup-result')
+    if (popup.className === 'popup-hide') {
+      popup.className = 'popup-show'
+      popupScore(currentPoints)
+      changeResult(result)
+      overlayAction()
+    }
+    else {
+      popup.className = 'popup-hide'
+      overlayAction()
+    }
+}
+
+//Refresh page function
+var refreshPage = function() {
+  location.reload()
+}
+
+//Play again button from popup
+var addButtonPopupResetEventHandlers = function (popupReset) {
+  popupReset.onclick = refreshPage
+}
+
+//#region Popup --> Score functionality
+
+//Open form
+var popupScoreShow = function () {
+  var html = '<form id="form-score">'
+  html += '<div class="form-box" data-errormsg="">'
+  html += '<label for="input-name" class="text-label">Enter Name</label>'
+  html += '<input type="text" id="input-name" autofocus placeholder="Name" tabindex="1"/>'
+  html += '<div id="text-form" class="text-form-hide"><p> *Name must contain between 3 and 10 characters </p></div>'
+  html += '</div>'
+  html += '</form>'
+  html += '<button id="form-save-btn" class="popup-btn">Save</button>'
+  return html
+}
+
+//Get today date
+var getDateToSave = function() {
+  var date = new Date()
+  var yyyy = date.getFullYear()
+  var dd = date.getDate()
+  var mm = (date.getMonth() + 1)
   if (dd < 10) {
-      dd = '0' + dd;
+    dd = '0' + dd
   }
   if (mm < 10) {
-      mm = '0' + mm;
+    mm = '0' + mm
   }
-  var currentDay = yyyy + '-' + mm + '-' + dd
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var seconds = date.getSeconds();
-  //Puts the 0 for the numbers below 2 digits
-  if (hours < 10) {
-      hours = '0' + hours;
-  }
-  if (minutes < 10) {
-      minutes = '0' + minutes;
-  }
-  if (seconds < 10) {
-      seconds = '0' + seconds;
-  }
-  return currentDay;
+  var todayDate = yyyy + '-' + mm + '-' + dd
+  return todayDate
 }
 
-//Saving players skills
-var savePoints = function (userName) {
-  var points = score;
-  var dateToday = getDate();
-  var userRank = document.getElementById('user-rank');
-   //Validations
-  if (userName == '') {
-     alert('Debes ingresar tu nickname');
-     return {};
-  }
-  if(userName.length < 3){
-    alert('El nombre debe tener mas de tres caracteres');
-     return {};
-  }
-  if (userName.length > 12) {
-    alert('El nombre debe tener menos de doce caracteres');
-     return {};
-  }
-  //Creating an array which will contain: username, points in game and date
-  if (!localStorage.getItem('RankingPlayer')) {
-      localStorage.setItem('RankingPlayer', '[]');
-  }
-  var RankingPlayer = JSON.parse(localStorage.getItem('RankingPlayer'));
-  RankingPlayer.push({ date: dateToday.toString(),userName: userName, points: points });
-  if (RankingPlayer.length >15) {
-    RankingPlayer.length = 15;
-  }
-  localStorage.setItem('RankingPlayer', JSON.stringify(RankingPlayer));
+//Order ranking by score then by date
+var rankingOrder = function(a, b) {
+  return b.score - a.score || new Date(b.date) - new Date(a.date) 
 }
 
-var usersPoints = function(){
-  //Getting the array wich will represent the ranking of players
-  localStorage.getItem('RankingPlayer');
-  var rankingPlayer = JSON.parse(localStorage.getItem('RankingPlayer'));
-  rankingPlayer.sort(
-    function (a, b) {
-        if (a.points > b.points) {
-            return -1;
-        }
-        if (a.points < b.points) {
-            return 1;
-        }
-        return 0;
-    }
-);
-  var listHTML = '<ul>'
-  for (let i = 0; i < rankingPlayer.length; i++) {
-      listHTML += '<li> ' + (i + 1) + '.' + '[' + rankingPlayer[i].date + ']' +'   '+
-       rankingPlayer[i].userName + '   ' + rankingPlayer[i].points + ' </li>';
-  }
-  listHTML += '</ul>';
-  return listHTML;
-}
-//Show and hide divs and put the players scores in the ranking
-var formEvents = function (evt) {
-  var userName = document.getElementById('userName');
-  savePoints(userName.value);
-  var rankingDiv = getElement('ranking');
-  var header = getElement('ranking-header');
-  header.innerText = 'RANKING';
-  var userData = getElement('user-data');
-  userData.className = 'display-none';
-  var userRank = document.getElementById('user-rank');
-  userRank.className = 'display-block';
-  document.getElementById('userName').value = '';
-  userRank.innerHTML = usersPoints();
-}
+var savedScores = []
 
-//Show and hide divs
-var showRankingDiv = function (bool, message = '') {
-  var close = getElement('close-ranking-button');
-  close.onclick = closeRankingDiv;
-  var rankingDiv = getElement('ranking');
-  var userData = getElement('user-data');
-  var header = getElement('ranking-header');
-  header.innerText = message;
-  if (bool) {
-    userData.className = 'display-block';
-    rankingDiv.className = 'display-block';
-    var submit = document.getElementById('submit');
-    submit.onclick = formEvents;
-  } 
+//Save objects on array
+var saveScore = function() {
+  var nameTxt = document.getElementById('input-name').value
+  var formTxt = document.getElementById('text-form')
+  if (nameTxt.length < 3 || nameTxt.length > 10) {
+    formTxt.className = 'text-form-show'
+  }
   else {
-    rankingDiv.className = 'display-none';
+    formTxt.className = 'text-form-hide'
+    var newScore = {
+      name: nameTxt,
+      score: currentPoints,
+      date: getDateToSave()
+    }
+    savedScores.push(newScore)
+    savedScores.sort(rankingOrder)
+    if (savedScores.length > 7) {
+      savedScores = savedScores.slice(0,7)
+    }
+    localStorage.setItem('savedScores', JSON.stringify(savedScores))
+    overlayAction()
+    refreshPage()
   }
 }
 
-// Initialize game
-var init = function () {
-  resetBoard();
-  var boardElement = document.getElementById('board');
-  var pegs = boardElement.getElementsByTagName('button');
-  addPegsEventHandlers(pegs)
-  var newGame = document.getElementById('reset');
-  newGame.onclick = resetBoard;
-  var saveGame = document.getElementById('save');
-  saveGame.onclick = savePegs;
-  var loadGame = document.getElementById('load');
-  loadGame.onclick = LoadPegs;
-  var putScore = document.getElementById('score');
-  putScore.textContent = 'SCORE' +' '+ score;
-  var counter = document.getElementById('pegs-remaining');
-  counter.textContent = 'PEGS' +' '+ numberOfPegs; 
-  var high = document.getElementById('highscores');
-  high.onclick = viewRanking;
-  //localStorage.clear();
+//Load array savedScores from local storage
+var loadSavedScores = function() {
+  savedScores =  JSON.parse(localStorage.getItem('savedScores'))
+  if (savedScores === null) {
+    savedScores = []
+  }
 }
-// Load of the document
-window.onload = init;
+
+//Generate ranking table
+var generateScoreTable = function() {
+  var html = '<ul id="ranking-list">'
+  html += '<p class="ranking-text"> Top 7 BEST SCORES </p>'
+  for (let i = 0; i < savedScores.length; i++) {
+    html += '<li id="ranking-list-element">'
+    html += 'Name: ' + savedScores[i].name + ' | Score: ' + savedScores[i].score + ' | Date: ' + savedScores[i].date
+    html += '</li>'
+  }
+  html += '</ul>'
+  return html
+}
+
+//#endregion
+
+var openPopupScore = function() {
+  var divForm = document.getElementById('inner-form')
+  if (divForm.className == 'form-enabled') {
+    divForm.innerHTML = ''
+    divForm.className = 'form-disabled'
+  }
+  else {
+    divForm.className = 'form-enabled'
+    divForm.innerHTML = popupScoreShow()
+    document.getElementById('form-save-btn').onclick = saveScore
+  }
+}
+
+//Save btn from popup
+var addButtonPopupSaveEventHandlers = function (popupSave) {
+  popupSave.onclick = openPopupScore
+}
+
+var returnToPage = function () {
+  var popUpClose = document.getElementById('popup-ranking')
+  if (popUpClose.className === 'popup-show') {
+    popUpClose.className = 'popup-hide'
+  }
+  else {
+    popUpClose.className = 'popup-hide'
+  }
+  overlayAction()
+}
+
+//#endregion
+
+//#region Ball movement and points
+
+var currentPoints = 0
+
+var changePoints = function() { 
+  return '<h1>' + 'Score: ' + currentPoints + '</h1>'
+}
+
+var pointsPerMovemment = 1
+
+var moveBall = function(evt) {
+  var id = evt.target.id
+  var pos = getPositionFromId(id)
+  if (pos.x !== undefined && pos.y !== undefined){
+    if (suggestions.includes(id)) /*if element is on array return true (include)*/{
+      //ball selected
+      var oldRow = selectedBall.x
+      var oldCol= selectedBall.y
+     //ball suggested
+      var newRow = pos.x
+      var newCol = pos.y
+      //middle ball
+      var midRow = oldRow + ((newRow - oldRow) / 2)
+      var midCol = oldCol + ((newCol - oldCol) / 2)
+      //changes array values
+      board[oldRow][oldCol] = {value: 0}
+      board[midRow][midCol] = {value: 0}
+      board[newRow][newCol] = {value: 1}
+      //points
+      currentPoints = currentPoints + pointsPerMovemment
+      //reset
+      selectedBall = { x:undefined, y: undefined}
+      suggestions = []
+      init()
+    }
+    //Check if player won or lost
+    if (checkResult())
+    {
+      if (currentPoints == 31){
+        victory = 'you win! congratulations'
+        popupAction(victory, currentPoints)
+      }
+      else {
+        defeat = 'you lost! better luck next time'
+        popupAction(defeat, currentPoints)
+      }
+    }
+  }
+}
+
+var addEmptyEventHandlers = function (empty) {
+  for (let i = 0; i < empty.length; i++) {
+    empty[i].onclick = moveBall
+  }
+}
+
+//#endregion
+
+//#region Menu buttons
+
+var addButtonsEventHandlers = function (buttons) {
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].onclick = pressButton
+  }
+}
+
+var pressButton = function (evt) {
+  var id = evt.target.id
+  //RESET BTN
+  if (id == 'reset') {
+    resetBoard()
+    selectedBall = { x:undefined, y: undefined}
+    suggestions = []
+    currentPoints = 0
+    init()  
+  }
+  //SAVE BTN
+  else if (id == 'save') {
+    //Save board
+    var JSONreadyBoard = JSON.stringify(board)
+    localStorage.setItem('board', JSONreadyBoard)
+    console.log(JSON.parse(localStorage['board']))
+    //Save points
+    var JsoncurrentPoints = JSON.stringify(currentPoints)
+    localStorage.setItem('currentPoints', JsoncurrentPoints)
+    console.log(JSON.parse(localStorage['currentPoints']))
+  }
+  //LOAD BTN
+  else if (id == 'load') {
+    if (JSON.parse(localStorage['board'])) {
+    loadBoard(board)
+    currentPoints = JSON.parse(localStorage['currentPoints'])
+    selectedBall = { x:undefined, y: undefined}
+    suggestions = []
+    init()
+    }
+  }
+  //RANKING BTN
+  else if (id == 'ranking') {
+    var newpopup = document.getElementById('popup-ranking')
+    var innerPopup = document.getElementById('popup-ranking-inner')
+    if (newpopup.className === 'popup-hide') {
+      newpopup.className = 'popup-show'
+    }
+    else {
+      newpopup.className = 'popup-hide'
+    }
+    innerPopup.innerHTML = generateScoreTable()
+    overlayAction()
+  }
+}
+
+//#endregion
+
+//#region Init
+
+var init = function () {
+  var boardElement = document.getElementById('board')
+  boardElement.innerHTML = generateBoard()
+  var Balls = boardElement.getElementsByClassName('ball')
+  addBallsEventHandlers(Balls)
+  var empty = boardElement.getElementsByClassName('empty')
+  addEmptyEventHandlers(empty)
+  var buttons = document.getElementsByClassName('menu')
+  addButtonsEventHandlers(buttons)
+  var finalScore = document.getElementById('Score')
+  finalScore.innerHTML = changePoints()
+  var popupReset = document.getElementById('popup-reset-btn')
+  addButtonPopupResetEventHandlers(popupReset)
+  var popupSave = document.getElementById('popup-save-btn')
+  addButtonPopupSaveEventHandlers(popupSave)
+  var rankingReturn = document.getElementById('popup-ranking-btn')
+  rankingReturn.onclick = returnToPage
+  loadSavedScores()
+}
+
+//#endregion
+
+window.onload = init
+
 

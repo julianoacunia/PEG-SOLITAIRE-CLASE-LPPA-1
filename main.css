@@ -8,20 +8,73 @@ body{
 header{
   width: 100%;
 }
-#menu {
+.menu {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   background-color: #197c83;
 }
-#menu button {
+.menu button {
   color: #111111;
   padding: 10px;
   background-color: #ffffff;
 }
 
+.overlay-disabled {
+  display: flex;
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.3);
+}
 
+.overlay-enabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.3);
+}
 
+#popup-ranking {
+  align-content: center;
+  text-align: center;
+  padding-top: 35px;
+  padding-bottom: 50px;
+  background: transparent;
+  background-size: 100% 100%;
+}
+
+.ranking-text {
+  margin-top: 7px;
+  color: #17202A;
+  font-family: fantasy;
+  font-size: 17px;
+}
+
+#ranking-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  top: 0;
+  color: #17202A;
+  font-family: fantasy;
+  font-size: 13px; 
+}
+
+#ranking-list-element {
+  margin: 2px;
+}
 
 html {
   font-size: 16px;

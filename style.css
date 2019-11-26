@@ -1,61 +1,64 @@
-.title{
-font-size: 20px;
-color: #ffffff;
-font-family: Arial, Helvetica, sans-serif;
+.title  {
+    font-size: 20px;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
 }
-footer{
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: row;
-background-color: red;
-top: 50px;
+
+footer  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    background-color: red;
+    top: 50px;
 }
-#board{ 
-border-radius: 5px;
-padding: 1vw;
-margin-top: 3vh;
+
+#board  { 
+    border-radius: 5px;
+    padding: 1vw;
+    margin-top: 3vh;
 }
-#board button{
-width: 3vw;
-height: 3vw;
-margin: 1vw;
-border: 1px solid #999;
-border-radius: 50px;
+
+#board button   {
+    width: 3vw;
+    height: 3vw;
+    margin: 1vw;
+    border: 1px solid #999;
+    border-radius: 50px;
 }
     
-#board button.hidden{
-visibility: hidden;
+#board button.hidden    {
+    visibility: hidden;
 }  
-#board button.peg{
+#board button.ball{
 background-color: #fabdfc;
 border: 2px solid #000408;
 border-radius: 50px;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
 }
-#board button.peg:hover{
+#board button.ball:hover{
 background-color: #bf6ae6;
 }
-#board button.peg:active{
+#board button.ball:active{
 background-color: #bf6ae6;    
 }
-#board button.hole{
+#board button.empty{
 background-color: #333333;
 }
-#board button.hole:hover{
+#board button.empty:hover{
 cursor: default;
 }
-#board button.selected{
+#board button.ballSelected{
 background-color: #bf6ae6;
 border: 2px solid #000000;
 border-radius: 50px;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
 }
-#board button.selected:active{
+#board button.ballSelected:active{
 background-color: #500070;
 }
     
-#board button.suggestion{
+#board button.suggestions{
 background-color:  #7907a7;
 border: 2px solid #000000;
 box-shadow: 2px 0px 3px 1px rgba(0, 0, 0, 0.65) 
