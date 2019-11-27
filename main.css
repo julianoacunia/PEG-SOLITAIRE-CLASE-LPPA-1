@@ -76,7 +76,17 @@ header  {
   background: transparent;
   background-size: 100% 100%;
 }
-
+#popup-ranking-btn {
+  color: #111111;
+  margin: 15px;
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px  #fabdfc;
+  border-radius: 20px;
+}
+#popup-ranking-btn:hover  {
+  background-color: #bf6ae6;
+}
 .ranking-text {
   margin-top: 7px;
   color: #ffffff;
