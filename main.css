@@ -16,7 +16,7 @@ header  {
   justify-content: center;
 }
 
-.menu button {
+.menu button,#popup-reset-btn,#form-save-btn,#popup-save-btn,#popup-ranking-btn {
   color: #111111;
   margin: 15px;
   margin-top: 10px;
@@ -24,7 +24,7 @@ header  {
   border: 2px  #fabdfc;
   border-radius: 20px;
 }
-.menu button:hover {
+.menu button:hover,#popup-reset-btn:hover,#form-save-btn:hover,#popup-save-btn:hover,#popup-ranking-btn:hover {
   background-color: #bf6ae6;
 }
 
@@ -66,28 +66,6 @@ header  {
   visibility: visible;
   width: 350px;
 }
-#popup-reset-btn,#form-save-btn  {
-  color: #111111;
-  margin: 15px;
-  margin-top: 10px;
-  padding: 10px;
-  border: 2px  #fabdfc;
-  border-radius: 20px;
-}
-#popup-reset-btn:hover {
-  background-color:  #bf6ae6;
-}
-#popup-save-btn {
-  color: #111111;
-  margin: 15px;
-  margin-top: 10px;
-  padding: 10px;
-  border: 2px  #fabdfc;
-  border-radius: 20px;
-}
-#popup-save-btn:hover {
-  background-color:  #bf6ae6;
-}
 #popup-text {
   margin-bottom: 7px;
   font-size: 40px;
@@ -105,17 +83,6 @@ header  {
   padding-bottom: 50px;
   background: transparent;
   background-size: 100% 100%;
-}
-#popup-ranking-btn {
-  color: #111111;
-  margin: 15px;
-  margin-top: 10px;
-  padding: 10px;
-  border: 2px  #fabdfc;
-  border-radius: 20px;
-}
-#popup-ranking-btn:hover  {
-  background-color: #bf6ae6;
 }
 .ranking-text {
   margin-top: 7px;
