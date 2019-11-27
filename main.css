@@ -88,6 +88,13 @@ header  {
 #popup-save-btn:hover {
   background-color:  #bf6ae6;
 }
+#popup-text {
+  margin-bottom: 7px;
+  font-size: 40px;
+}
+#popup-final-score {
+  font-size: 30px;
+}
 #popup-ranking {
   align-content: center;
   text-align: center;

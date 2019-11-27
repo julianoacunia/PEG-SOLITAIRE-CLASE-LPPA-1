@@ -264,7 +264,7 @@ var changeResult = function (result) {
 //Get score
 var popupScore = function(currentPoints) { 
   finalScore = document.getElementById('popup-final-score') 
-  finalScore.innerHTML = '<p class="popup-result-text"> Your final score is: ' + currentPoints + ' !Great Job!</p>'
+  finalScore.innerHTML = '<p class="popup-result-text"> Your final score is: ' + currentPoints + ',Great Job!</p>'
 }
 
 //Show or hide popup result
@@ -448,11 +448,11 @@ var moveBall = function(evt) {
     if (checkResult())
     {
       if (currentPoints == 31){
-        victory = 'you win! congratulations'
+        victory = 'You win! congratulations'
         popupAction(victory, currentPoints)
       }
       else {
-        defeat = 'you lost! better luck next time'
+        defeat = 'You lost! better luck next time'
         popupAction(defeat, currentPoints)
       }
     }
