@@ -298,7 +298,7 @@ var addButtonPopupResetEventHandlers = function (popupReset) {
 var popupScoreShow = function () {
   var html = '<form id="form-score">'
   html += '<div class="form-box" data-errormsg="">'
-  html += '<label for="input-name" class="text-label">Enter Name</label>'
+  html += '<label for="input-name" class="text-label">Enter Name: </label>'
   html += '<input type="text" id="input-name" autofocus placeholder="Name" tabindex="1"/>'
   html += '<div id="text-form" class="text-form-hide"><p> *Name must contain between 3 and 10 characters </p></div>'
   html += '</div>'
