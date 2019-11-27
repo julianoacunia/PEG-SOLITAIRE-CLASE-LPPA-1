@@ -79,9 +79,10 @@ header  {
 
 .ranking-text {
   margin-top: 7px;
-  color: #17202A;
+  color: #ffffff;
   font-family: fantasy;
-  font-size: 17px;
+  font-size: 40px;
+  width: 350px;
 }
 
 #ranking-list {
@@ -91,9 +92,9 @@ header  {
   text-align: center;
   align-content: center;
   top: 0;
-  color: #17202A;
+  color: #ffffff;
   font-family: fantasy;
-  font-size: 13px; 
+  font-size: 20px; 
 }
 
 #ranking-list-element {
