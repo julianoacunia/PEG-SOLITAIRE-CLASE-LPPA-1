@@ -6,4 +6,4 @@ The objetive is simple, get eat all pegs through moving pegs.
 
 ENJOY THE GAME!
 
-[Play](https://facundo1.github.io/LPPA-PEG-SOLITAIRE/)
+[Play](https://julianoacunia.github.io/PEG-SOLITAIRE-CLASE-LPPA-1/)
