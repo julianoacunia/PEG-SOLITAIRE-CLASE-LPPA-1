@@ -1,6 +1,6 @@
 body  {
     display: flex;
-    background-image:url(../image/fondo1.jpg);
+    background-image:url(../assets/fondo1.jpg);
     flex-direction: column;
     justify-content: center;
     align-items: center;
