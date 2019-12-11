@@ -27,19 +27,15 @@
 #board button.ball:hover {
     background-color: #bf6ae6;
 }
-
 #board button.ball:active {
     background-color: #bf6ae6;    
 }
-
 #board button.empty{
     background-color: #333333;
 }
-
 #board button.empty:hover{
     cursor: default;
 }
-
 #board button.ballSelected{
     background-color: #bf6ae6;
     border: 2px solid #000000;
@@ -48,8 +44,7 @@
 }
 #board button.ballSelected:active{
     background-color: #500070;
-}
-    
+}   
 #board button.suggestions{
     background-color:  #7907a7;
     border: 2px solid #000000;
